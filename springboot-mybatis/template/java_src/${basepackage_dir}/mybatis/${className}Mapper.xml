@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<#assign className = table.className>
+<#assign tableName = table.sqlName>
+<#assign classNameLower = className?uncap_first>
+
+<mapper namespace="${basepackage}.mapper.${className}Mapper">
+    <!--<cache type="com.yyw.yhyc.cache.LoggingRedisCache"-->
+           <!--flushInterval="86400000" size="1024000">-->
+    <!--</cache>-->
+    <resultMap id="${className}ResultMapper" type="${basepackage}.model.${className}">
+        <#list table.columns as column>
+        <result column="${column.sqlName}" property="${column.columnNameLower}"/>
+        </#list>
+    </resultMap>
+
+    <sql id="commonColumns">
+<#list table.columns as column>
+        ${column.sqlName}<#if column_has_next>,</#if>
+</#list>
+    </sql>
+
+    <sql id="commonColumnsNotPK">
+<#list table.columns as column>
+    <#if !column.pk>
+        ${column.sqlName}<#if column_has_next>,</#if>
+    </#if>
+</#list>
+    </sql>
+
+
+    <sql id="commonProcessDateColumns">
+    <#list table.columns as column>
+        ${column.sqlName}<#if column_has_next>,</#if>
+    </#list>
+    </sql>
+
+    <sql id="commonCondition">
+<#list table.columns as column>
+    <#if column.javaType == "java.sql.Timestamp">
+        <if test="${column.columnNameLower}!= null ">
+            AND ${column.sqlName} = ${r"#{" + column.columnNameLower + r"}"}
+        </if>
+    <#else>
+        <if test="${column.columnNameLower}!= null and ${column.columnNameLower}!= ''">
+            AND ${column.sqlName} = ${r"#{" + column.columnNameLower + r"}"}
+        </if>
+    </#if>
+</#list>
+    </sql>
+
+
+    <insert id="save" parameterType="${basepackage}.model.${className}" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[ INSERT INTO ${tableName} ( ]]> <include refid="commonColumnsNotPK"/>
+        <![CDATA[
+                ) VALUES (
+        <#list table.columns as column>
+            <#if !column.pk>
+                ${r"#{" + column.columnNameLower + r"}"}<#if column_has_next>,</#if>
+            </#if>
+        </#list>
+      ) ]]>
+    </insert>
+
+    <insert id="batchInsert"  parameterType="${basepackage}.model.${className}">
+        insert into ${tableName}( <include refid="commonColumnsNotPK"/> )
+        values
+            <foreach collection="list" item="item" index="index" separator=",">
+                (
+                <#list table.columns as column>
+                    <#if !column.pk>
+                        ${r"#{item." + column.columnNameLower + r"}"}<#if column_has_next>,</#if>
+                    </#if>
+                </#list>
+                )
+            </foreach>
+    </insert>
+
+    <update id="update" parameterType="${basepackage}.model.${className}">
+        <![CDATA[ UPDATE ${tableName} SET
+<#list table.columns as column>
+        <#if column.pk>
+             ${column.sqlName} = ${r"#{" + column.columnNameLower + r"}"} ]]>
+        </#if>
+</#list>
+<#list table.columns as column>
+    <#if !column.pk>
+        <#if column.javaType == "java.sql.Timestamp">
+            <if test="${column.columnNameLower}!= null ">
+                , ${column.sqlName} = ${r"#{" + column.columnNameLower + r"}"}
+            </if>
+        <#else>
+            <if test="${column.columnNameLower}!= null and ${column.columnNameLower}!= ''">
+                , ${column.sqlName} = ${r"#{" + column.columnNameLower + r"}"}
+            </if>
+        </#if>
+    </#if>
+</#list>
+<#list table.columns as column>
+    <#if column.pk>
+      <![CDATA[  WHERE ${column.sqlName} = ${r"#{" + column.columnNameLower + r"}"} ]]>
+    </#if>
+</#list>
+    </update>
+
+
+    <delete id="deleteByPK" parameterType="java.lang.Integer">
+        <![CDATA[ DELETE FROM ${tableName}
+<#list table.columns as column>
+    <#if column.pk>
+        WHERE ${column.sqlName} = ${r"#{" + column.columnNameLower + r"}"} ]]>
+    </#if>
+</#list>
+    </delete>
+
+    <delete id="deleteByPKeys" parameterType="map">
+        DELETE FROM ${tableName} WHERE
+    <#list table.columns as column>
+        <#if column.pk>
+        <foreach collection="primaryKeys" index="index" item="id" open=" ${column.sqlName} IN(" separator="," close=") ">
+            ${r"${id}"}
+        </foreach>
+        </#if>
+    </#list>
+    </delete>
+
+    <delete id="deleteByProperty" parameterType="${basepackage}.model.${className}">
+        DELETE FROM ${tableName} WHERE 1 = 1
+        <include refid="commonCondition"/>
+    </delete>
+
+    <select id="getByPK" parameterType="java.lang.Integer" resultMap="${className}ResultMapper">
+        SELECT <include refid="commonProcessDateColumns"/>
+<#list table.columns as column>
+    <#if column.pk>
+        FROM ${tableName} WHERE ${column.sqlName} = ${r"#{" + column.columnNameLower + r"}"}
+    </#if>
+</#list>
+    </select>
+
+    <select id="list" resultMap="${className}ResultMapper">
+        SELECT  <include refid="commonProcessDateColumns"/>
+        FROM ${tableName}
+    </select>
+
+    <select id="listByProperty" parameterType="${basepackage}.model.${className}" resultMap="${className}ResultMapper">
+        SELECT  <include refid="commonProcessDateColumns"/>
+        FROM ${tableName} WHERE 1=1
+        <include refid="commonCondition"/>
+    </select>
+
+    <select id="findByCount" parameterType="${basepackage}.model.${className}" resultType="int">
+        SELECT count(1) AS totalcount FROM ${tableName} WHERE 1=1
+        <include refid="commonCondition"/>
+    </select>
+
+    <select id="findByPagination" parameterType="${basepackage}.model.${className}" resultMap="${className}ResultMapper">
+        SELECT <include refid="commonProcessDateColumns"/>
+        FROM ${tableName} WHERE 1=1
+        <include refid="commonCondition"/>
+    </select>
+
+</mapper>
