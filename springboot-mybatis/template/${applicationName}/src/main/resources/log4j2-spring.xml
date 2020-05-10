@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+    <!--该文件的名称log4j2-spring.xml中有-spring的后缀，则不再需要在application.properties中指定该文件的位置-->
+    <!--log4j2配置说明： https://blog.csdn.net/vbirdbest/article/details/71751835-->
+    <properties>
+        <!-- 配置日志文件输出目录，此配置将日志输出到tomcat根目录下的指定文件夹( 相对路径 ${r'${'}sys:catalina.home${r'}'}/WebAppLogs/ ) -->
+        <property name="LOG_HOME">@propertie.log4j.home@</property>
+        <property name="FILE_NAME">@propertie.log4j.fileName@</property>
+    </properties>
+
+    <appenders>
+        <!--控制台日志-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:s,SSS}:%5p [%t] (%C.%M:%L) - %m%n"/>
+        </Console>
+
+
+        <!--固定文件大小的日志 http://www.zuidaima.com/blog/3887507677498368.htm-->
+        <!--https://blog.csdn.net/vbirdbest/article/details/71751835
+            该输出源也是写入到文件，不同的是比File更加强大，可以指定当文件达到一定大小（如20MB）时，另起一个文件继续写入日志，另起一个文件就涉及到新文件的名字命名规则，
+            因此需要配置文件命名规则这种方式更加实用，因为你不可能一直往一个文件中写，如果一直写，文件过大，打开就会卡死，也不便于查找日志。-->
+        <RollingRandomAccessFile name="RollingRandomAccessFile" fileName="@propertie.log4j.home@/@propertie.log4j.fileName@.log" filePattern="@propertie.log4j.home@/$${r'${'}date:yyyy-MM${r'}'}/@propertie.log4j.fileName@-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:s,SSS}:%5p [%t] (%C.%M:%L) - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>  <!-- 按天分日志文件   这个配置需要和filePattern结合使用，注意filePattern中配置的文件重命名规则是${r'${'}FILE_NAME${r'}'}-%d{yyyy-MM-dd HH-mm}-%i，最小的时间粒度是mm，即分钟    -->
+                <SizeBasedTriggeringPolicy size="50 MB"/>  <!-- 按大小划分       指定当文件体积大于size指定的值时，触发Rolling -->
+            </Policies>
+            <DefaultRolloverStrategy max="20"/> <!-- 指定最多保存的文件个数 -->
+        </RollingRandomAccessFile>
+    </appenders>
+
+
+    <loggers>
+
+        <Logger name="org.springframework" level="@propertie.log4j.level@" />
+        <Logger name="com.alibaba" level="@propertie.log4j.level@" />
+        <Logger name="${basepackage}" level="@propertie.log4j.level@" />
+
+
+        <root level="@propertie.log4j.level@">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingRandomAccessFile" />
+        </root>
+    </loggers>
+
+
+
+</configuration>

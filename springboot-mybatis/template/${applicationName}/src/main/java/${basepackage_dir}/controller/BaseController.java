@@ -10,8 +10,8 @@ package ${basepackage}.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class BaseController {
 
-    private static final Logger log = LogManager.getLogger(BaseController.class);
+    private static final Logger log = LoggerFactory.getLogger(BaseController.class);
 
     protected HttpServletRequest request;
     protected HttpServletResponse response;

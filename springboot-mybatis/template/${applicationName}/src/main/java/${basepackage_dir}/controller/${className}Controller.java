@@ -18,8 +18,8 @@ import ${basepackage}.service.${className}Service;
 import ${basepackage}.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -43,7 +43,7 @@ import java.sql.Timestamp;
 @Api(value="${table.remarks?if_exists}",tags = "${table.remarks?if_exists}接口")
 public class ${className}Controller extends BaseController{
 
-    private static final Logger log = LogManager.getLogger(${className}Controller.class);
+    private static final Logger log = LoggerFactory.getLogger(${className}Controller.class);
 
     @Autowired
     private ${className}Service ${classNameLower}Service;

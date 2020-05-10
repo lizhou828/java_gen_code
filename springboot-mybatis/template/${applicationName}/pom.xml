@@ -28,6 +28,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${r'${'}springboot.version${r'}'}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -101,6 +107,11 @@
             <artifactId>swagger-bootstrap-ui</artifactId>
             <version>1.9.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <version>${r'${'}springboot.version${r'}'}</version>
+        </dependency>
     </dependencies>
 
 
@@ -158,24 +169,30 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <propertie.log4j>DEBUG</propertie.log4j>
                 <profile.env>dev</profile.env>
+                <propertie.log4j.level>DEBUG</propertie.log4j.level>
+                <propertie.log4j.home>logs</propertie.log4j.home>
+                <propertie.log4j.fileName>${applicationName}</propertie.log4j.fileName>
             </properties>
         </profile>
 
         <profile>
             <id>test</id>
             <properties>
-                <propertie.log4j>WARN</propertie.log4j>
                 <profile.env>test</profile.env>
+                <propertie.log4j.level>WARN</propertie.log4j.level>
+                <propertie.log4j.home>logs</propertie.log4j.home>
+                <propertie.log4j.fileName>${applicationName}</propertie.log4j.fileName>
             </properties>
         </profile>
 
         <profile>
             <id>prod</id>
             <properties>
-                <propertie.log4j>WARN</propertie.log4j>
                 <profile.env>prod</profile.env>
+                <propertie.log4j.level>ERROR</propertie.log4j.level>
+                <propertie.log4j.home>logs</propertie.log4j.home>
+                <propertie.log4j.fileName>${applicationName}</propertie.log4j.fileName>
             </properties>
         </profile>
     </profiles>

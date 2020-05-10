@@ -7,7 +7,8 @@ package ${basepackage}.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.PageHelper;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ${basepackage}.mapper.${className}Mapper;
 import ${basepackage}.model.${className};
 import ${basepackage}.model.query.${className}Query;
@@ -24,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class ${className}ServiceImpl extends GenericService<${className}, Integer> implements ${className}Service {
+
+    private static final Logger log = LoggerFactory.getLogger(${className}ServiceImpl.class);
 
     private ${className}Mapper ${classNameLower}Mapper;
 
