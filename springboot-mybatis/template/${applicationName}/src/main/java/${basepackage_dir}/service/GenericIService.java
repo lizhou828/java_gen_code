@@ -84,12 +84,7 @@ public interface GenericIService<T, PK extends Serializable> {
      */
     public int findByCount(T t);
 
-    /**
-     * 根据查询条件查询分页记录
-     * @return
-     * @throws Exception
-     */
-    public PageInfo<T> findByPage(Page<T> page, T t);
+
 
     public int batchInsert(List<T> list);
 }

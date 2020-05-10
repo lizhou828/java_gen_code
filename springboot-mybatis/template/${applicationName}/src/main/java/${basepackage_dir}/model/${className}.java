@@ -3,20 +3,27 @@
 <#assign classNameLower = className?uncap_first>
 package ${basepackage}.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  */
+@ApiModel(value = "${table.remarks?if_exists}")
 public class ${className} implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
 <#list table.columns as c>
     /* ${c.remarks?if_exists} */
+<#if  c.pk  >
+    @ApiModelProperty(name = "${c.columnNameLower}",value = "主键id",example = "",required = false)
+<#else>
+    @ApiModelProperty(name = "${c.columnNameLower}",value = "${c.remarks?if_exists}",example = "",required = true)
+</#if>
     private ${c.javaType} ${c.columnNameLower};
-
 </#list>
 
 <#list table.columns as c>

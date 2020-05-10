@@ -10,6 +10,10 @@ import com.github.pagehelper.PageHelper;
 
 import ${basepackage}.mapper.${className}Mapper;
 import ${basepackage}.model.${className};
+import ${basepackage}.model.query.${className}Query;
+import ${basepackage}.model.PageInfoDto;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import ${basepackage}.service.${className}Service;
@@ -107,25 +111,25 @@ public class ${className}ServiceImpl extends GenericService<${className}, Intege
         return ${classNameLower}Mapper.findByCount(${classNameLower});
     }
 
-     /**
+    /**
      * 根据查询条件查询分页记录
      * @return
      */
     @Override
-    public PageInfo<${className}> findByPage(Page<${className}> page, ${className} ${classNameLower}) {
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        List<${className}> ${classNameLower}List = ${classNameLower}Mapper.listByProperty(${classNameLower});
-        Page pageList = (Page<${className}>) ${classNameLower}List;
-
-        PageInfo pageInfo = new PageInfo<${className}>();
-        if(null == ${classNameLower} || ${classNameLower}List.size() == 0){
-            return pageInfo;
+    public PageInfoDto<${className}> findByPage(${className}Query ${classNameLower}Query) {
+        PageHelper.startPage(${classNameLower}Query.getPageNum(), ${classNameLower}Query.getPageSize());
+        List<${className}> ${classNameLower}List = ${classNameLower}Mapper.listByProperty(${classNameLower}Query);
+        PageInfoDto pageInfoDto = new PageInfoDto<${className}>(${classNameLower}Query.getPageNum(),${classNameLower}Query.getPageSize(),0,0);
+        if(null == ${classNameLower}List || ${classNameLower}List.size() == 0){
+            pageInfoDto.setList(new ArrayList<${className}>());
+            return pageInfoDto;
         }
-        pageInfo.setList(pageList.getResult());
-        pageInfo.setPageSize(page.getPageSize());
-        pageInfo.setPageNum(page.getPageNum());
-        pageInfo.setPages(page.getPages());
-        pageInfo.setTotal(page.getTotal());
-        return pageInfo;
+        Page pageList = (Page<${className}>) ${classNameLower}List;
+        pageInfoDto.setList(pageList.getResult());
+        pageInfoDto.setPageSize(pageList.getPageSize());
+        pageInfoDto.setPageNum(pageList.getPageNum());
+        pageInfoDto.setPages(pageList.getPages());
+        pageInfoDto.setTotal(Integer.valueOf(pageList.getTotal()+""));
+        return pageInfoDto;
     }
 }

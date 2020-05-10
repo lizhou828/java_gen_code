@@ -5,12 +5,14 @@
  * 版权所有@2015 国裕网络科技  保留所有权利.
  ***************************************************************/
 
-package com.diyun.bigData.controller;
+package ${basepackage}.controller;
 
 
 import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
