@@ -170,7 +170,7 @@
             </activation>
             <properties>
                 <profile.env>dev</profile.env>
-                <propertie.log4j.level>DEBUG</propertie.log4j.level>
+                <propertie.log4j.level>INFO</propertie.log4j.level>
                 <propertie.log4j.home>logs</propertie.log4j.home>
                 <propertie.log4j.fileName>${applicationName}</propertie.log4j.fileName>
             </properties>
