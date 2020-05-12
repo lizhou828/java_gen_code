@@ -1,7 +1,12 @@
 <#include "/java_copyright.include">
 <#assign className = table.className>
 <#assign classNameLower = className?uncap_first>
-
+<#list table.columns as c>
+    <#if  c.pk  >
+        <#assign pkColumn = c.columnNameLower >
+        <#assign pkColumnJavaType = c.javaType >
+    </#if>
+</#list>
 package ${basepackage}.service.impl;
 
 import com.github.pagehelper.Page;
@@ -134,5 +139,10 @@ public class ${className}ServiceImpl extends GenericService<${className}, Intege
         pageInfoDto.setPages(pageList.getPages());
         pageInfoDto.setTotal(Integer.valueOf(pageList.getTotal()+""));
         return pageInfoDto;
+    }
+
+    @Override
+    public int batchUpdate(List<${pkColumnJavaType}> ${pkColumn}List, ${className} ${classNameLower}) {
+        return ${classNameLower}Mapper.batchUpdate( ${pkColumn}List, ${classNameLower});
     }
 }

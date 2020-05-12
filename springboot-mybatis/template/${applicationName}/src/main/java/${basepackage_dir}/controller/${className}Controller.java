@@ -13,6 +13,7 @@ import ${basepackage}.model.PageInfoDto;
 import ${basepackage}.enums.DropStateEnum;
 import ${basepackage}.model.ResponseObject;
 import ${basepackage}.model.${className};
+import ${basepackage}.model.dto.${className}BatchDto;
 import ${basepackage}.model.query.${className}Query;
 import ${basepackage}.service.${className}Service;
 import ${basepackage}.utils.ObjectUtils;
@@ -144,12 +145,29 @@ public class ${className}Controller extends BaseController{
 
     @ApiOperation(value = "按条件统计")
     @RequestMapping(value="findByCount",method = RequestMethod.POST,name = "按条件统计")
-    public Integer findByCount(@RequestBody ${className} ${classNameLower}) {
+    public ResponseObject findByCount(@RequestBody ${className} ${classNameLower}) {
         if(null == ${classNameLower} || ObjectUtils.allFieldWithoutValue(${classNameLower})){
             log.error("非法参数,${classNameLower}=" + ${classNameLower});
-            return 0;
+            return ResponseObject.error("非法参数");
         }
-        return  ${classNameLower}Service.findByCount(${classNameLower});
+        int count = ${classNameLower}Service.findByCount(${classNameLower});
+        Map map = new HashMap<>();
+        map.put("count",count);
+        return new ResponseObject(map);
+    }
+
+    @ApiOperation(value = "批量更新字段")
+    @RequestMapping(value="batchUpdate",method = RequestMethod.POST,name = "批量更新字段")
+    public ResponseObject batchUpdate(@RequestBody ${className}BatchDto ${classNameLower}BatchDto){
+        if(null == ${classNameLower}BatchDto || CollectionUtils.isEmpty(${classNameLower}BatchDto.get${pkColumn?cap_first}List())
+                || null == ${classNameLower}BatchDto.get${className}()  || ObjectUtils.allFieldWithoutValue(${classNameLower}BatchDto.get${className}())){
+            log.error("非法参数！${classNameLower}BatchDto=" + ${classNameLower}BatchDto);
+            return ResponseObject.error("非法参数");
+        }
+        ${className} ${classNameLower} = ${classNameLower}BatchDto.get${className}();
+        ${classNameLower}.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        int resultCount =${classNameLower}Service.batchUpdate(${classNameLower}BatchDto.get${pkColumn?cap_first}List(),${classNameLower});
+        return resultCount > 0 ? ResponseObject.ok("批量更新成功") : ResponseObject.error("批量更新失败");
     }
 
 }

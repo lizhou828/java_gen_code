@@ -3,6 +3,13 @@
 <#assign className = table.className>
 <#assign tableName = table.sqlName>
 <#assign classNameLower = className?uncap_first>
+<#list table.columns as c>
+    <#if  c.pk  >
+        <#assign pkColumn = c.columnNameLower >
+        <#assign pkSqlName = c.sqlName >
+        <#assign pkColumnJavaType = c.javaType >
+    </#if>
+</#list>
 
 <mapper namespace="${basepackage}.mapper.${className}Mapper">
     <!--<cache type="com.yyw.yhyc.cache.LoggingRedisCache"-->
@@ -101,6 +108,32 @@
       <![CDATA[  WHERE ${column.sqlName} = ${r"#{" + column.columnNameLower + r"}"} ]]>
     </#if>
 </#list>
+    </update>
+
+    <update id="batchUpdate" parameterType="map">
+          UPDATE  ${tableName}
+          set update_time =  ${r"#{" + classNameLower + ".updateTime" +  r"}"}
+<#list table.columns as column>
+    <#if !column.pk && column.columnNameLower !="updateTime">
+        <#if column.javaType == "java.sql.Timestamp">
+            <if test="${classNameLower + '.'}${column.columnNameLower}!= null ">
+                , ${column.sqlName} = ${r"#{" + classNameLower+"." +  column.columnNameLower + r"}"}
+            </if>
+        <#elseif  column.columnNameLower =="dropState">
+            <if test="${classNameLower + '.'}${column.columnNameLower}!= null ">
+                , ${column.sqlName} = ${r"#{" + classNameLower+"." + column.columnNameLower + r"}"}
+            </if>
+        <#else>
+            <if test="${classNameLower + '.'}${column.columnNameLower}!= null and ${classNameLower + '.'}${column.columnNameLower}!= ''">
+                , ${column.sqlName} = ${r"#{" + classNameLower+"." + column.columnNameLower + r"}"}
+            </if>
+        </#if>
+    </#if>
+</#list>
+        WHERE
+        <foreach collection="${pkColumn}List" index="index" item="id" open=" ${pkSqlName} IN(" separator="," close=") ">
+            ${r"${id}"}
+        </foreach>
     </update>
 
 
