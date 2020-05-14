@@ -29,6 +29,9 @@ public class ${className}BatchDto implements Serializable {
     @ApiModelProperty(name = "${classNameLower}",value = "商品sku",example = "",required = true)
     private ${className} ${classNameLower};
 
+    @ApiModelProperty(name = "${classNameLower}List",value = "集合(批量新增时使用)",example = "",required = true)
+    private List<${className}> ${classNameLower}List;
+
     public List<${pkColumnJavaType}> get${pkColumn?cap_first}List() {
         return ${pkColumn}List;
     }
@@ -45,11 +48,20 @@ public class ${className}BatchDto implements Serializable {
         this.${classNameLower} = ${classNameLower};
     }
 
+    public List<${className}> get${className}List() {
+        return ${classNameLower}List;
+    }
+
+    public void set${className}List(List<${className}> ${classNameLower}List) {
+        this.${classNameLower}List = ${classNameLower}List;
+    }
+
     @Override
     public String toString() {
         return "${className}BatchDto{" +
-        "${pkColumn}List=" + ${pkColumn}List +
-        ", ${classNameLower}=" + ${classNameLower} +
+            "${pkColumn}List=" + ${pkColumn}List +
+            ", ${classNameLower}=" + ${classNameLower} +
+            ", ${classNameLower}List=" + ${classNameLower}List +
         '}';
     }
 }

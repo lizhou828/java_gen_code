@@ -119,6 +119,10 @@ public class ${className}ServiceImpl extends GenericService<${className}, Intege
         return ${classNameLower}Mapper.findByCount(${classNameLower});
     }
 
+    public int batchInsert(List<${className}> ${classNameLower}List){
+        return ${classNameLower}Mapper.batchInsert(${classNameLower}List);
+    }
+
     /**
      * 根据查询条件查询分页记录
      * @return

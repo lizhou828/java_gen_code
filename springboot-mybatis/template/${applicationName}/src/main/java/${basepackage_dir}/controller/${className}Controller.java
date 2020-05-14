@@ -170,4 +170,19 @@ public class ${className}Controller extends BaseController{
         return resultCount > 0 ? ResponseObject.ok("批量更新成功") : ResponseObject.error("批量更新失败");
     }
 
+    @ApiOperation(value = "批量新增")
+    @RequestMapping(value="batchInsert",method = RequestMethod.POST,name = "批量新增")
+    public ResponseObject batchInsert(@RequestBody ${className}BatchDto ${classNameLower}BatchDto) {
+        if(null == ${classNameLower}BatchDto || CollectionUtils.isEmpty(${classNameLower}BatchDto.get${className}List())){
+            log.error("非法参数,${classNameLower}BatchDto=" + ${classNameLower}BatchDto);
+            return ResponseObject.error("非法参数");
+        }
+        for(${className} ${classNameLower} : ${classNameLower}BatchDto.get${className}List()){
+            ${classNameLower}.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            ${classNameLower}.setDropState(DropStateEnum.NOT_DELETEED.getCode());
+        }
+        int resultCount = ${classNameLower}Service.batchInsert(${classNameLower}BatchDto.get${className}List());
+        return resultCount > 0 ? ResponseObject.ok("批量新增成功") : ResponseObject.error("批量新增失败");
+    }
+
 }
