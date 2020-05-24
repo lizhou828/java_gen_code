@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ${className}Example{
     protected String orderByClause;
@@ -180,12 +182,12 @@ public class ${className}Example{
         }
 
     <#if c.javaType == "java.lang.String">
-        public Criteria andUsernameLike(String value) {
+        public Criteria and${c.columnNameUpper}Like(String value) {
             addCriterion("${c.sqlName} like", value, "${c.columnNameUpper}");
             return (Criteria) this;
         }
 
-        public Criteria andUsernameNotLike(String value) {
+        public Criteria and${c.columnNameUpper}NotLike(String value) {
             addCriterion("${c.sqlName} not like", value, "${c.columnNameUpper}");
             return (Criteria) this;
         }
