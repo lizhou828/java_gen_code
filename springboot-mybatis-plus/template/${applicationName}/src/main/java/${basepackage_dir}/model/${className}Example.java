@@ -23,7 +23,7 @@ public class ${className}Example{
 
     private Boolean forUpdate;
 
-    public SysUserExample() {
+    public ${className}Example() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

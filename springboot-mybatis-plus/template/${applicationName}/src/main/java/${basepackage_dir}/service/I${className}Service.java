@@ -8,11 +8,13 @@
     </#if>
 </#list>
 package ${basepackage}.service;
+import ${basepackage}.model.${className};
 
 
 /**
  */
 public interface I${className}Service {
 
+        ${className} getByPK(${pkColumnJavaType} ${pkColumn});
 
 }

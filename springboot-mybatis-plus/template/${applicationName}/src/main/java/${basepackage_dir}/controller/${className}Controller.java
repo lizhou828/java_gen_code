@@ -13,9 +13,8 @@ import ${basepackage}.model.PageInfoDto;
 import ${basepackage}.enums.DropStateEnum;
 import ${basepackage}.model.ResponseObject;
 import ${basepackage}.model.${className};
-import ${basepackage}.model.dto.${className}BatchDto;
-import ${basepackage}.model.query.${className}Query;
-import ${basepackage}.service.${className}Service;
+import ${basepackage}.model.${className}Example;
+import ${basepackage}.service.I${className}Service;
 import ${basepackage}.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,7 +50,7 @@ public class ${className}Controller extends BaseController{
 
     @ApiOperation(value = "根据主键查询")
     @GetMapping("/getByPK/{${pkColumn}}")
-    public ResponseObject<${className}> getByPK(@PathVariable("${pkColumn}") Integer ${pkColumn}){
+    public ResponseObject<${className}> getByPK(@PathVariable("${pkColumn}") ${pkColumnJavaType} ${pkColumn}){
         if(null == ${pkColumn} || ${pkColumn} < 0){
             return ResponseObject.error("非法参数");
         }

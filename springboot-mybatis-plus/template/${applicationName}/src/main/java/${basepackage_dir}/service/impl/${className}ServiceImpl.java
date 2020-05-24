@@ -16,7 +16,7 @@ import ${basepackage}.mapper.${className}DAO;
 import ${basepackage}.model.${className};
 import java.util.ArrayList;
 import java.util.List;
-
+import ${basepackage}.model.${className};
 import ${basepackage}.service.I${className}Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +31,9 @@ public class ${className}ServiceImpl implements I${className}Service {
     @Autowired
     private ${className}DAO ${classNameLower}DAO;
 
-
+    @Override
+    public ${className} getByPK(${pkColumnJavaType} ${pkColumn}) {
+        return ${classNameLower}DAO.selectByPrimaryKey(${pkColumn});
+    }
 
 }
