@@ -95,8 +95,7 @@ public class ${className}Controller extends BaseController{
     @RequestMapping(value="add",method = RequestMethod.POST,name = "新增操作")
     public ResponseObject add(@RequestBody ${className} ${classNameLower}) {
         if(null == ${classNameLower} ){
-            log.error("非法参数");
-            return null;
+            return ResponseObject.error("非法参数");
         }
         ${classNameLower}.setCreateTime(new Timestamp(System.currentTimeMillis()));
         ${classNameLower}.setDropState(DropStateEnum.NOT_DELETEED.getCode());

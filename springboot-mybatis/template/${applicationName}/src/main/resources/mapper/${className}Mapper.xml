@@ -132,7 +132,7 @@
 </#list>
         WHERE
         <foreach collection="${pkColumn}List" index="index" item="id" open=" ${pkSqlName} IN(" separator="," close=") ">
-            ${r"${id}"}
+            ${r"#{id}"}
         </foreach>
     </update>
 
