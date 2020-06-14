@@ -12,6 +12,7 @@
         <module>core</module>
         <module>springboot-mybatis</module>
         <module>springboot-mybatis-plus</module>
+        <module>moneyNote</module>
     </modules>
 
     <dependencies>
