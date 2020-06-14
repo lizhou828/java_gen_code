@@ -16,11 +16,11 @@ import ${basepackage}.model.${className};
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.liz.mn.model.dto.Pagination;
-import com.liz.mn.model.dto.RequestModel;
+import ${basepackage}.model.dto.Pagination;
+import ${basepackage}.model.dto.RequestModel;
+import ${basepackage}.model.dto.ResponseObject;
 import ${basepackage}.service.${className}Service;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,7 +66,7 @@ public class ${className}Controller {
      * @return
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public void add(@RequestBody ${className} ${classNameLower}) throws Exception {
+    public ResponseObject add(@RequestBody ${className} ${classNameLower}) throws Exception {
         if(null == ${classNameLower} ){
             return ResponseObject.error("非法参数");
         }
