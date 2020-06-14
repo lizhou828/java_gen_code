@@ -22,16 +22,12 @@ import ${basepackage}.service.${className}Service;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
-@Controller
+@RestController
 @RequestMapping("/${classNameLower}")
 public class ${className}Controller {
 
@@ -45,9 +41,9 @@ public class ${className}Controller {
      * @return
      */
     @RequestMapping(value = "/getByPK/{key}", method = RequestMethod.GET)
-    @ResponseBody
-    public ${className} getByPK(@PathVariable("key") ${pkColumnJavaType} key) throws Exception {
-        return ${classNameLower}Service.getByPK(key);
+    public ResponseObject<${className}> getByPK(@PathVariable("key") ${pkColumnJavaType} key) throws Exception {
+        ${className} ${classNameLower} = ${classNameLower}Service.getByPK(key);
+        return new ResponseObject(${classNameLower});
     }
 
     /**
@@ -55,14 +51,14 @@ public class ${className}Controller {
      * @return
      */
     @RequestMapping(value = {"/listPg"}, method = RequestMethod.POST)
-    @ResponseBody
-    public Pagination<${className}> findByPagination(@RequestBody RequestModel<${className}> requestModel) throws Exception {
+    public ResponseObject<Pagination<${className}>> findByPagination(@RequestBody RequestModel<${className}> requestModel) throws Exception {
         if(null == requestModel){
             requestModel = new RequestModel<>();
             requestModel.setPageNo(1);
             requestModel.setPageSize(20);
         }
-        return ${classNameLower}Service.findByPage(requestModel.getPageNo(),requestModel.getPageSize(), requestModel.getParam());
+        Pagination<${className}> ${classNameLower}Pagination =  ${classNameLower}Service.findByPage(requestModel.getPageNo(),requestModel.getPageSize(), requestModel.getParam());
+        return new ResponseObject(${classNameLower}Pagination);
     }
 
     /**
@@ -71,7 +67,14 @@ public class ${className}Controller {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public void add(@RequestBody ${className} ${classNameLower}) throws Exception {
+        if(null == ${classNameLower} ){
+            return ResponseObject.error("非法参数");
+        }
         ${classNameLower}Service.save(${classNameLower});
+        if(null != ${classNameLower}.get${pkColumn?cap_first}() && ${classNameLower}.get${pkColumn?cap_first}() > 0){
+            return ResponseObject.ok();
+        }
+        return ResponseObject.error();
     }
 
     /**
@@ -79,8 +82,14 @@ public class ${className}Controller {
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public void delete(@RequestBody List<${pkColumnJavaType}> list) throws Exception {
-        ${classNameLower}Service.deleteByPKeys(list);
+    public ResponseObject delete(@RequestBody List<${pkColumnJavaType}> list) throws Exception {
+        try{
+            ${classNameLower}Service.deleteByPKeys(list);
+            return ResponseObject.ok();
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+        }
+        return ResponseObject.error();
     }
 
     /**
@@ -88,8 +97,9 @@ public class ${className}Controller {
      * @return
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public void update(@RequestBody ${className} ${classNameLower}) throws Exception {
-        ${classNameLower}Service.update(${classNameLower});
+    public ResponseObject update(@RequestBody ${className} ${classNameLower}) throws Exception {
+        int result = ${classNameLower}Service.update(${classNameLower});
+        return result > 0 ? ResponseObject.ok() : ResponseObject.error();
     }
 
 }
