@@ -33,7 +33,7 @@ public class DbTableFactory {
 	}
 
 	private void init() {
-		String driver = GeneratorProperties.getRequiredProperty("jdbc.driver");
+		String driver = GeneratorProperties.getRequiredProperty("jdbcDriver");
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
@@ -47,16 +47,16 @@ public class DbTableFactory {
 	}
 	
 	public String getCatalog() {
-		return GeneratorProperties.getNullIfBlank("jdbc.catalog");
+		return GeneratorProperties.getNullIfBlank("jdbcCatalog");
 	}
 
 	public String getSchema() {
-		return GeneratorProperties.getNullIfBlank("jdbc.schema");
+		return GeneratorProperties.getNullIfBlank("jdbcSchema");
 	}
 
 	public Connection getConnection() throws SQLException {
 		if(connection == null || connection.isClosed()) {
-			connection = DriverManager.getConnection(GeneratorProperties.getRequiredProperty("jdbc.url"), GeneratorProperties.getRequiredProperty("jdbc.username"), GeneratorProperties.getProperty("jdbc.password"));
+			connection = DriverManager.getConnection(GeneratorProperties.getRequiredProperty("jdbcUrl"), GeneratorProperties.getRequiredProperty("jdbcUsername"), GeneratorProperties.getProperty("jdbcPassword"));
 		}
 		return connection;
 	}

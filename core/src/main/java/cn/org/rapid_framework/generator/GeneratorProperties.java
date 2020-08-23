@@ -45,8 +45,8 @@ public class GeneratorProperties {
 			}
 
 			/* 塞入不同数据库类型的全局变量，从而生成不同的SQL语句（例如获取时间的函数就不一样） */
-			String jdbcUrl = props.getProperty("jdbc.url");
-			String jdbcDriver = props.getProperty("jdbc.driver");
+			String jdbcUrl = props.getProperty("jdbcUrl");
+			String jdbcDriver = props.getProperty("jdbcDriver");
 			if(StringHelper.isNotEmpty(jdbcUrl) && StringHelper.isNotEmpty(jdbcDriver)){
 				if(jdbcUrl.startsWith("jdbc:mysql:") && jdbcDriver.startsWith("com.mysql.jdbc")){
 					props.setProperty(DB_TYPE, DbTypeEnum.MySQL.toString());
